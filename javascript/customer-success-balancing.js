@@ -14,7 +14,57 @@ function customerSuccessBalancing(
    * =========== Write your solution here ==========
    * ===============================================
    */
+
+  const distribution = {};
+
+  const filtered = filterAway(customerSuccess, customerSuccessAway);
+  const sorted = sortArray(filtered);
+
+  let i = 0;
+  let j = 0;
+  while (true) {
+    let cs = sorted[j];
+  }
 }
+
+function sortArray(customerSuccess) {
+  return customerSuccess.sort((a, b) => a.score - b.score);
+}
+
+test("Sort scenario 1", () => {
+  const css = [
+    { id: 1, score: 60 },
+    { id: 2, score: 20 },
+    { id: 3, score: 95 },
+    { id: 4, score: 75 },
+  ];
+
+  expect(sortArray(css)).toEqual([
+    { id: 2, score: 20 },
+    { id: 1, score: 60 },
+    { id: 4, score: 75 },
+    { id: 3, score: 95 },
+  ])
+});
+
+function filterAway(customerSuccess, customerSuccessAway) {
+  return customerSuccess.filter(cs => !customerSuccessAway.includes(cs.id));
+}
+
+test("Filter scenario 1", () => {
+  const css = [
+    { id: 1, score: 60 },
+    { id: 2, score: 20 },
+    { id: 3, score: 95 },
+    { id: 4, score: 75 },
+  ];
+  const csAway = [2, 4];
+
+  expect(filterAway(css, csAway)).toEqual([
+    { id: 1, score: 60 },
+    { id: 3, score: 95 }
+  ]);
+});
 
 test("Scenario 1", () => {
   const css = [
