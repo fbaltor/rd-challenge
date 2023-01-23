@@ -215,3 +215,19 @@ test("Scenario 7", () => {
 
   expect(customerSuccessBalancing(css, customers, csAway)).toEqual(3);
 });
+
+test("Scenario 8", () => {
+  const css = [
+    { id: 1, score: 20 },
+    { id: 2, score: 60 },
+  ];
+  const customers = [
+    { id: 1, score: 5 },
+    { id: 2, score: 10 },
+    { id: 3, score: 30 },
+    { id: 4, score: 40 },
+  ];
+  const csAway = [];
+
+  expect(customerSuccessBalancing(css, customers, csAway)).toEqual(0);
+});
