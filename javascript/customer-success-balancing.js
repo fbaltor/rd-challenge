@@ -24,20 +24,35 @@ function customerSuccessBalancing(
   let max;
   let maxCount = 0;
 
+  let secondMax;
+  let secondMaxCount = 0;
+
   for (let i = 0; i < customers.length; i++) {
     let customer = customers[i];
     let cs = map[customer.score];
 
-    if (distribution[cs] === undefined) {
+    if (!distribution.hasOwnProperty(cs)) {
       distribution[cs] = 0;
     }
 
     distribution[cs]++;
 
-    if (distribution[cs] > maxCount) max = cs;
+    if (distribution[cs] >= maxCount) {
+      if (cs !== max) {
+        secondMax = max;
+        secondMaxCount = maxCount  
+      }
+
+      max = cs;
+      maxCount = distribution[cs];
+    }
   }
 
-  return max === undefined ? 0 : max;
+  if (maxCount === secondMaxCount) return 0;
+
+  if (max === undefined) return 0;
+
+  return max;
 }
 
 function generetaMap(sortedCustomerSuccess) {
