@@ -14,18 +14,68 @@ function customerSuccessBalancing(
    * =========== Write your solution here ==========
    * ===============================================
    */
-
-  const distribution = {};
-
   const filtered = filterAway(customerSuccess, customerSuccessAway);
   const sorted = sortArray(filtered);
 
-  let i = 0;
-  let j = 0;
-  while (true) {
-    let cs = sorted[j];
+  const map = generetaMap(sorted);
+  
+  const distribution = {};
+
+  let max;
+  let maxCount = 0;
+
+  for (let i = 0; i < customers.length; i++) {
+    let customer = customers[i];
+    let cs = map[customer.score];
+
+    if (distribution[cs] === undefined) {
+      distribution[cs] = 0;
+    }
+
+    distribution[cs]++;
+
+    if (distribution[cs] > maxCount) max = cs;
   }
+
+  return max === undefined ? 0 : max;
 }
+
+function generetaMap(sortedCustomerSuccess) {
+  const map = {};
+
+  for (let i = 0; i < sortedCustomerSuccess.length; i++) {
+    let j = (i === 0
+      ? 0
+      : sortedCustomerSuccess[i - 1].score + 1); 
+
+    let cs = sortedCustomerSuccess[i];
+    while (j <= cs.score) {
+      map[j] = cs.id;
+      j++;
+    }
+  }
+
+  return map;
+}
+
+test("Generate map scenario 1", () => {
+  const css = [
+    { id: 1, score: 2 },
+    { id: 2, score: 4 },
+    { id: 3, score: 5 },
+  ];
+
+  const expectedMap = {
+    '0': 1,
+    '1': 1,
+    '2': 1,
+    '3': 2,
+    '4': 2,
+    '5': 3,
+  }
+
+  expect(generetaMap(css)).toEqual(expectedMap)
+});
 
 function sortArray(customerSuccess) {
   return customerSuccess.sort((a, b) => a.score - b.score);
@@ -102,7 +152,9 @@ function mapEntities(arr) {
 }
 
 function arraySeq(count, startAt){
-  return Array.apply(0, Array(count)).map((it, index) => index + startAt);
+  const res = Array.apply(0, Array(count)).map((it, index) => index + startAt);
+  // console.log(res[0], res[res.length - 1]);
+  return res;
 }
 
 test("Scenario 2", () => {
@@ -118,8 +170,12 @@ test("Scenario 3", () => {
   const testStartTime = new Date().getTime();
 
   const css = mapEntities(arraySeq(999, 1));
+  // console.log(css);
   const customers = buildSizeEntities(10000, 998);
+  // console.log(customers);
   const csAway = [999];
+
+  // console.log(generetaMap(css));
 
   expect(customerSuccessBalancing(css, customers, csAway)).toEqual(998);
 
